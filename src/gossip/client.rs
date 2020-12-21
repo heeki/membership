@@ -26,7 +26,7 @@ impl GossipClient {
             },
             Err(e) => println!("[error] failed_to_connect={}", e)
         }
-        println!("[ok] connection_terminated");
+        println!("[ok] connection terminated");
     }
 
     // static methods
