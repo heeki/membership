@@ -1,4 +1,6 @@
-use membership;
+mod gossip;
+
+use gossip::{client, server};
 use std::env;
 
 fn usage() {
@@ -14,11 +16,11 @@ fn main() {
             let cmd = args[1].as_str();
             match cmd {
                 "--server" => {
-                    let s = membership::GossipServer::new(String::from("0.0.0.0:8080"));
+                    let s = server::GossipServer::new(String::from("0.0.0.0:8080"));
                     s.start_server();
                 },
                 "--client" => {
-                    let c = membership::GossipClient::new(String::from("0.0.0.0:8080"));
+                    let c = client::GossipClient::new(String::from("0.0.0.0:8080"));
                     c.send("hello world".as_bytes());
                 },
                 _ => usage()
@@ -29,7 +31,7 @@ fn main() {
             let msg = args[2].as_str();
             match cmd {
                 "--client" => {
-                    let c = membership::GossipClient::new(String::from("0.0.0.0:8080"));
+                    let c = client::GossipClient::new(String::from("0.0.0.0:8080"));
                     c.send(msg.as_bytes());
                 },
                 _ => usage()

@@ -1,7 +1,7 @@
 # Gossip Membership Protocol
 This repository represents an attempt to apply recent learnings to build a practical, rudimentary gossip-based membership protocol.
 
-## Phased Implementat Approach
+## Phased Implementation Approach
 The following is a working list of required components for this project:
 - [x] unicast networking module
 - [ ] multicast networking module
