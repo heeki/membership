@@ -1,17 +1,19 @@
 mod gossip;
 
 use gossip::{client, server};
+use log::{info, error};
 use std::env;
 
 fn usage() {
-    println!("usage: cargo run -- [--server|--client [message]]")
+    error!("usage: cargo run -- [--server|--client [message]]")
 }
 
 fn main() {
+    env_logger::init();
     let args: Vec<String> = env::args().collect();
-    println!("{:?}", args);
+    info!("{:?}", args);
     let c = membership::Config::new(String::from("etc/config.json"));
-    println!("{:?}", c);
+    info!("{:?}", c);
 
     match args.len() {
         1 => usage(),

@@ -1,3 +1,4 @@
+use log::{info, error};
 use std::io::{Read, Write};
 use std::net::{Ipv4Addr, SocketAddrV4, TcpStream};
 use std::str::from_utf8;
@@ -20,13 +21,13 @@ impl GossipClient {
     pub fn send(&self, msg: &[u8]) {
         match TcpStream::connect(self.socket) {
             Ok(mut stream) => {
-                println!("[ok] connected_to_server={}", self.socket.to_string());
+                info!("connected to server {}", self.socket.to_string());
                 stream.write(msg).unwrap();
                 GossipClient::handle_response(stream, msg);
             },
-            Err(e) => println!("[error] failed_to_connect={}", e)
+            Err(e) => error!("failed to connect {}", e)
         }
-        println!("[ok] connection terminated");
+        info!("connection terminated");
     }
 
     // static methods
@@ -36,10 +37,10 @@ impl GossipClient {
             Ok(_) => {
                 let original = from_utf8(msg).unwrap();
                 let response = from_utf8(&data).unwrap().replace("\u{0}", "");
-                if original == response { println!("[ok] response={:?}", response); }
-                else { println!("[error] original={:?} response={:?}", original, response); }
+                if original == response { info!("response={:?}", response); }
+                else { error!("original={:?} response={:?}", original, response); }
             },
-            Err(e) => println!("[error] stream_error={}", e)
+            Err(e) => error!("stream_error={}", e)
         }
     }
 }
