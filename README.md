@@ -7,3 +7,6 @@ The following is a working list of required components for this project:
 - [ ] multicast networking module
 - [ ] gossip membership sub-module for initializing membership lists
 - [ ] gossip membership sub-module for failure detection and membership list updates
+
+## Logging
+Use `RUST_LOG=info` to display info! logging output.

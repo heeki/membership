@@ -5,7 +5,8 @@ use log::{info, error};
 use std::env;
 
 fn usage() {
-    error!("usage: cargo run -- [--server|--client [message]]")
+    error!("usage: cargo run -- [--tserver|--tclient [message]]");
+    error!("usage: cargo run -- [--userver|--uclient [message]]");
 }
 
 fn main() {
@@ -19,15 +20,24 @@ fn main() {
         1 => usage(),
         2 => {
             let cmd = args[1].as_str();
+            let default = "hello world";
             match cmd {
-                "--server" => {
-                    let s = server::GossipServer::new(String::from(c.get_socket()));
-                    s.start_server();
+                "--tserver" => {
+                    let s = server::GossipServer::new(c.get_tserver());
+                    s.start_tserver();
                 },
-                "--client" => {
-                    let c = client::GossipClient::new(String::from(c.get_socket()));
-                    c.send("hello world".as_bytes());
+                "--userver" => {
+                    let s = server::GossipServer::new(c.get_userver());
+                    s.start_userver();
                 },
+                "--tclient" => {
+                    let c = client::GossipClient::new(None, c.get_tserver());
+                    c.tsend(default.as_bytes());
+                },
+                "--uclient" => {
+                    let c = client::GossipClient::new(Some(c.get_uclient()), c.get_userver());
+                    c.usend(default.as_bytes());
+                }
                 "--config" => {
                 },
                 _ => usage()
@@ -37,9 +47,13 @@ fn main() {
             let cmd = args[1].as_str();
             let msg = args[2].as_str();
             match cmd {
-                "--client" => {
-                    let c = client::GossipClient::new(String::from(c.get_socket()));
-                    c.send(msg.as_bytes());
+                "--tclient" => {
+                    let c = client::GossipClient::new(None, c.get_tserver());
+                    c.tsend(msg.as_bytes());
+                },
+                "--uclient" => {
+                    let c = client::GossipClient::new(Some(c.get_uclient()), c.get_userver());
+                    c.usend(msg.as_bytes());
                 },
                 _ => usage()
             }
